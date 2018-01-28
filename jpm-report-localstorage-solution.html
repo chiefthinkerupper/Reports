@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quarterly Repport</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <style type="text/css">
+      .break-word {
+      font-size:8px;
+      overflow-wrap: break-word;
+      }
+      #id-display{
+      font-size:8px;
+      }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <!-- Jumbotron -->
+        <div class="jumbotron">
+            <h1 class="text-center">Quarterly Report</h1>
+        </div>
+        <div class="row">
+            <!-- Sign-Up Panel-->
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Account Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        <!-- Sign-up Form (note the various input "types")-->
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="ks-input">KS</label>
+                                <input class="form-control" id="ks-input" type="text">
+                            </div>
+                            <!-- <div class="form-group">
+                <label for="email-input">Email:</label>
+                <input class="form-control" id="email-input" type="email">
+              </div>
+              <div class="form-group">
+                <label for="age-input">Age:</label>
+                <input class="form-control" id="age-input" type="number">
+              </div> -->
+                            <div class="form-group">
+                                <label for="id-input">Entry ID's</label>
+                                <textarea class="form-control" id="id-input" rows="5"></textarea>
+                            </div>
+                            <button class="btn btn-default" id="add-user" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Response Panel -->
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Response</h3>
+                    </div>
+                    <div class="panel-body" id="response">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Clip Title</th>
+                                    <th>Entry Id</th>
+                                    <th>SID's</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Insert movie rows here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Most Recent Member Panel -->
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Most Recent Account Details</h3>
+                    </div>
+                    <div class="panel-body" id="recent-member">
+                        <p id="ks-display", class="break-word">Provide a privileged session token. </p>
+                        <!-- <h4 id="email-display">Email: jimmy@john.edu</h4>
+            <h4 id="age-display">Age: 27</h4> -->
+                        <p id="id-display">Provide an entryId.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- JavaScript -->
+    <script>
+    // Capture Button Click
+    $("#add-user").on("click", function(event) {
+        // prevent page from refreshing when form tries to submit itself
+        event.preventDefault();
+
+        // Capture user inputs and store them into variables
+        const ks = $("#ks-input").val().trim();
+        // const email = $("#email-input").val().trim();
+        // const age = $("#age-input").val().trim();
+        const id = $("#id-input").val().trim();
+
+        // Console log each of the user inputs to confirm we are receiving them
+        console.log(ks);
+        // console.log(email);
+        // console.log(age);
+        console.log(id);
+
+        // Replaces the content in the "recent-member" div with the new info
+        $("#ks-display").text(ks);
+        // $("#email-display").text(email);
+        // $("#age-display").text(age);
+        $("#id-display").text(id);
+
+        // Clear localStorage
+        localStorage.clear();
+
+        // Store all content into localStorage
+        localStorage.setItem("ks", ks);
+        // localStorage.setItem("email", email);
+        // localStorage.setItem("age", age);
+        localStorage.setItem("id", id);
+
+    // The search takes an entryId, searches the kaltura api for it
+      const queryURL = "https://www.kaltura.com/api_v3/index.php?service=media&action=get&ks=" + ks + "&entryId=" + id + "&ignoreNull=1&responseProfile%5BsystemName%5D=INSIDER_CAAS";
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).done(function(response) {
+                console.log(response);
+      });
+
+
+    // By default display the content from localStorage
+    $("#ks-display").text(localStorage.getItem("ks"));
+    // $("#email-display").text(localStorage.getItem("email"));
+    // $("#age-display").text(localStorage.getItem("age"));
+    $("#id-display").text(localStorage.getItem("id"));
+      });
+    </script>
+</body>
+
+</html>
